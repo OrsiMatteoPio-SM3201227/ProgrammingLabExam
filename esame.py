@@ -14,10 +14,6 @@ class CSVTimeSeriesFile():
     def __init__(self, name):
         # Creation of the "name" attribute
         self.name = name
-        try:
-            file = open(self.name, 'r')
-        except ExamException('The file does not exist!'):
-            return None
 
     def get_data(self):
         # Creation of two lists: a list and a list of list
@@ -27,7 +23,7 @@ class CSVTimeSeriesFile():
         try:
             file = open(self.name, 'r')
         except ExamException:
-            print ('The file does not exist!')
+            print('The file does not exist!')
             return None
         # File reading, line by line
         for line in file:
@@ -38,7 +34,11 @@ class CSVTimeSeriesFile():
             # If header is not processed, add elements to the list
             if elements[0] != 'date':
                 # Conversion of the second column from string type to numerical type
-                elements[1] = float(elements[1])
+                try:
+                    elements[1] = float(elements[1])
+                except ExamException as e:
+                    print('Errore in conversione del valore "{}" a numerico: "{}"'.format(elements[1], e))
+                    break
                 list.append(elements)
         # File closing
         file.close()
@@ -92,7 +92,7 @@ def detect_similar_monthly_variations(list, years):
 # ==============================
 #          Main Program
 # ==============================
-time_series_file = CSVTimeSeriesFile(name = 'dat.csv')
+time_series_file = CSVTimeSeriesFile(name = 'dta.csv')
 
 time_series = time_series_file.get_data()
 
