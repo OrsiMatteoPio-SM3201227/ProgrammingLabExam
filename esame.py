@@ -155,7 +155,7 @@ def detect_similar_monthly_variations(data, years):
                     # If two months are not consecutives, add 'False' to the first year list
                     if abs(first_year_previous_month_couple - int(couple[0][5 : 7])) != 1:
                         for g in range(abs(first_year_previous_month_couple - int(couple[0][5 : 7]))):
-                            first_year_monthly_variations.append(False)
+                            first_year_monthly_variations.append('False')
                     # If two months are consecutives, add element to the first year list
                     else:
                         first_year_monthly_variations.append(couple[1])
@@ -168,7 +168,7 @@ def detect_similar_monthly_variations(data, years):
                     # If two months are not consecutives, add 'False' to the second year list
                     if abs(second_year_previous_month_couple - int(couple[0][5 : 7])) != 1:
                         for g in range(abs(second_year_previous_month_couple - int(couple[0][5 : 7]))):
-                            second_year_monthly_variations.append(False)
+                            second_year_monthly_variations.append('False')
                     # If two months are consecutives, add element to the second year list
                     else:
                         second_year_monthly_variations.append(couple[1])
@@ -188,15 +188,19 @@ def detect_similar_monthly_variations(data, years):
                 raise ExamException('The second year value "{}" is not in the list!'.format(year))
     # Calculation of the difference of values for each ordered pair of months of the first year, replacing the elements in the first year list and deleting the last value of 12th month (if the value is 'False', mantain that value)
     for value in range(len(first_year_monthly_variations) - 1):
-        if value == False:
-            first_year_monthly_variations[value] = False
+        if str(first_year_monthly_variations[value]) == 'False':
+            first_year_monthly_variations[value] = 'False'
+        elif str(first_year_monthly_variations[value + 1]) == 'False':
+            first_year_monthly_variations[value] = 'False'
         else:
             first_year_monthly_variations[value] = abs(first_year_monthly_variations[value] - first_year_monthly_variations[value + 1])
     first_year_monthly_variations = first_year_monthly_variations[0 : - 1]
     # Calculation of the difference of values for each ordered pair of months of the second year, replacing the elements in the second year list and deleting the last value of 12th month (if the value is 'False', mantain that value)
     for value in range(len(second_year_monthly_variations) - 1):
-        if value == False:
-            second_year_monthly_variations[value] = False
+        if str(second_year_monthly_variations[value]) == 'False':
+            second_year_monthly_variations[value] = 'False'
+        elif str(second_year_monthly_variations[value + 1]) == 'False':
+            second_year_monthly_variations[value] = 'False'
         else:
             second_year_monthly_variations[value] = abs(second_year_monthly_variations[value] - second_year_monthly_variations[value + 1])
     second_year_monthly_variations = second_year_monthly_variations[0 : - 1]
@@ -205,8 +209,11 @@ def detect_similar_monthly_variations(data, years):
     # Loop for each value in the first year list
     for value in range(len(first_year_monthly_variations)):
         # If the value is 'False', add 'False' to the list
-        if first_year_monthly_variations[value] == False:
+        if str(first_year_monthly_variations[value]) == 'False':
             similar_monthly_variations.append(False)
+        # If the value is 0 for both, add 'True' to the list
+        elif first_year_monthly_variations[value] == second_year_monthly_variations[value] == 0:
+            similar_monthly_variations.append(True)
         # If the difference of the differences of the values for each ordered pair of months of the two respective years is ±2, add 'True' to the list
         elif abs(first_year_monthly_variations[value] - second_year_monthly_variations[value]) <= 2:
             similar_monthly_variations.append(True)
