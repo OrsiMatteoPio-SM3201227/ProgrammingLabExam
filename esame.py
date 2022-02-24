@@ -74,6 +74,8 @@ class CSVTimeSeriesFile():
                             # Testing the month and the year ('Validity' and 'Order' cases) by using the previous variables
                             if month not in range(1, 13):
                                 pass
+                            elif year == 0:
+                                pass
                             else:
                                 if previous_year > year:
                                     raise ExamException('Years are not in ascending order.')
@@ -120,21 +122,21 @@ class CSVTimeSeriesFile():
 def detect_similar_monthly_variations(data, years):
     # Testing the input years
     if type(years) != list:
-        raise ExamException('Invalid type for years, only list supported. Got "{}"'.format(type(years)))
+        raise ExamException('Invalid type for years, only list supported. Got "{}".'.format(type(years)))
     if len(years) != 2:
         raise ExamException('Got less or more than two years, only two years supported.')
     if not isinstance(years[0], int):
-        raise ExamException('Invalid type for the first year, only integer accepted. Got "{}"'.format(type(years[0])))
+        raise ExamException('Invalid type for the first year, only integer accepted. Got "{}".'.format(type(years[0])))
     if not isinstance(years[1], int):
-        raise ExamException('Invalid type for the second year, only integer accepted. Got "{}"'.format(type(years[1])))
+        raise ExamException('Invalid type for the second year, only integer accepted. Got "{}".'.format(type(years[1])))
     if years[0] <= 0:
-        raise ExamException('Invalid year. Got "{}"'.format(years[0]))
+        raise ExamException('Invalid year. Got "{}".'.format(years[0]))
     if years[1] <= 0:
-        raise ExamException('Invalid year. Got "{}"'.format(years[1]))
+        raise ExamException('Invalid year. Got "{}".'.format(years[1]))
     if (years[1] - years[0]) != 1:
-        raise ExamException('Invalid years, only consecutive years accepted. Got "{}" and "{}"'.format(years[0], years[1]))
+        raise ExamException('Invalid years, only consecutive years accepted. Got "{}" and "{}".'.format(years[0], years[1]))
     if years[0] > years[1]:
-        raise ExamException('The first year "{}" is greater than the second year "{}"'.format(years[0], years[1]))
+        raise ExamException('The first year "{}" is greater than the second year "{}".'.format(years[0], years[1]))
     # Creation of two lists, one per year
     first_year_monthly_variations = []
     second_year_monthly_variations = []
@@ -221,18 +223,3 @@ def detect_similar_monthly_variations(data, years):
         else:
             similar_monthly_variations.append(False)
     return similar_monthly_variations
-
-# ==============================
-#            PROGRAM
-# ==============================
-#          Main Program
-# ==============================
-time_series_file = CSVTimeSeriesFile(name = 'data.csv')
-
-time_series = time_series_file.get_data()
-
-print('Dati contenuti nel file: "{}"'.format(time_series))
-
-result = detect_similar_monthly_variations(time_series, [1949, 1950])
-
-print('Dati contenuti nel file: "{}"'.format(result))
